@@ -6,28 +6,28 @@
 	import mapboxgl from 'mapbox-gl';
 	import '../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
 
+	// Import components
+	import ResetMap from '$lib/components/ResetMap.svelte';
+
 	// Stores
-	import { map, citiesDataFC } from '$lib/stores.js';
+	import { map, citiesDataFC, selectedIntlCity } from '$lib/stores.js';
 
 	let mapContainer;
+	let initialCenterLng;
+	let movedCenterLng;
 
 	mapboxgl.accessToken =
 		'pk.eyJ1IjoiamVuY2hlIiwiYSI6ImNsZzZ6OWh4ajA0dGczd25wMzRwcmUwZnEifQ.wSe4_SgYEgC-QX-6Clad9w';
 
 	// Set state of sidebar and globe padding
-
 	export let sidebarVisible;
-
 	let globePadding;
 
 	$: if (sidebarVisible) {
-		globePadding = { left: 550 };
+		globePadding = { left: 475 };
 	} else {
 		globePadding = { left: 0 };
 	}
-
-	//$: intlCities = $citiesDataFC.features.filter(d => d.intlCities)
-	//$: console.log($citiesDataFC?.features.map((d) => d.intlCity));
 
 	onMount(() => {
 		// Load map and set store
@@ -38,7 +38,7 @@
 				style: 'mapbox://styles/jenche/clsmom1ch043k01p5f4gsbq19',
 				zoom: 2,
 				maxZoom: 5,
-				center: [30, 50],
+				center: [50.45, 27.6],
 				projection: 'globe'
 			})
 		);
@@ -47,37 +47,22 @@
 		$map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
 
 		$map.on('load', () => {
+			// Establish initial center longtitude value
+			initialCenterLng = $map?.getCenter().lng;
+
+			// ...to determine when map has been panned/zoomed (i.e. when center longitude value has changed) for setting conditional styling on reset map button
+			$map.on('move', () => {
+				movedCenterLng = $map?.getCenter().lng;
+			});
+
 			// Shift globe based on state of sidebar
-			$map?.easeTo({
+			$map.easeTo({
 				padding: globePadding,
 				duration: 1000
 			});
 
 			// Set atmosphere style
 			$map.setFog({});
-
-			// https://docs.mapbox.com/mapbox-gl-js/guides/globe/
-			// $map.on('style.load', () => {
-			// 	$map.setFog({
-			// 		color: 'rgb(186, 210, 235)', // Lower atmosphere
-			// 		'high-color': 'rgb(36, 92, 223)', // Upper atmosphere
-			// 		'horizon-blend': 0.02, // Atmosphere thickness (default 0.2 at low zooms)
-			// 		'space-color': 'rgb(11, 11, 25)', // Background color
-			// 		'star-intensity': 0.6 // Background star brightness (default 0.35 at low zoooms )
-			// 	});
-			// });
-
-			// https://docs.mapbox.com/style-spec/reference/fog/
-			// $map.on('style.load', () => {
-			// 	$map.setFog({
-			// 		range: [0.8, 8],
-			// 		color: '#dc9f9f',
-			// 		'horizon-blend': 0.5,
-			// 		'high-color': '#245bde',
-			// 		'space-color': '#000000',
-			// 		'star-intensity': 0.15
-			// 	});
-			// });
 
 			// Add markers for international cities
 			$map.addSource('intlCities', {
@@ -100,7 +85,7 @@
 				}
 			});
 
-			// Add labels: https://docs.mapbox.com/style-spec/reference/layers/#layout-property
+			// Add int'l labels: https://docs.mapbox.com/style-spec/reference/layers/#layout-property
 			$map.addLayer({
 				id: 'intl-labels',
 				type: 'symbol',
@@ -118,17 +103,56 @@
 					'text-halo-width': 1
 				}
 			});
+
+			// Add markers for matching US cities
+			$map.addSource('usCities', {
+				type: 'geojson',
+				data: {
+					type: 'FeatureCollection',
+					features: $citiesDataFC.features?.map((feature) => feature.usCity)
+				}
+			});
+
+			$map.addLayer({
+				id: 'us-layer',
+				type: 'circle',
+				source: 'usCities',
+				paint: {
+					'circle-radius': 6,
+					'circle-stroke-width': 2,
+					'circle-color': 'yellow',
+					'circle-stroke-color': 'white'
+				}
+			});
+
+			// Hide US cities on initial load
+			$map.setFilter('us-layer', ['in', 'name', '']);
+
+			// Change cursor ti pointer when hovering over marker
+			$map.on('mouseenter', ['intl-layer', 'intl-labels'], () => {
+				$map.getCanvas().style.cursor = 'pointer';
+			});
+
+			// cursor goes back to default off point
+			$map.on('mouseleave', ['intl-layer', 'intl-labels'], () => {
+				$map.getCanvas().style.cursor = 'auto';
+			});
 		});
 
-		// Get city name from clicking marker
-		$map.on('click', 'intl-layer', (e) => {
-			//console.log(e.features[0].properties.name);
-		});
+		// Get city name from clicking marker/label
+		$map.on('click', ['intl-layer', 'intl-labels'], (e) => {
+			selectedIntlCity.set(e.features[0].properties.name);
 
-		// Get city name from clicking label
-		$map.on('click', function (e) {
-			const features = $map.queryRenderedFeatures(e.point);
-			//console.log(features[0].properties.name);
+			$map.flyTo({
+				center: [-95.7, 39],
+				essential: true, // "this animation is considered essential with respect to prefers-reduced-motion"
+				zoom: 3.75,
+				speed: 0.5,
+				curve: 1,
+				easing(t) {
+					return t;
+				}
+			});
 		});
 	});
 
@@ -138,13 +162,25 @@
 		}
 	});
 
+	// Update globe padding depending on state of sidebar
 	$: $map?.easeTo({
 		padding: globePadding,
 		duration: 1000
 	});
+
+	// Show US cities that match selected intl city
+	$: if ($selectedIntlCity) {
+		$map.setFilter('us-layer', ['any', ['in', $selectedIntlCity, ['get', 'name']]]);
+	}
 </script>
 
 <div class="map" bind:this={mapContainer} />
+
+{#if initialCenterLng !== movedCenterLng}
+	<div class="reset-btn-container">
+		<ResetMap {initialCenterLng} {movedCenterLng} />
+	</div>
+{/if}
 
 <style>
 	.map {
@@ -152,5 +188,11 @@
 		width: 100%;
 		top: 0;
 		bottom: 0;
+	}
+
+	.reset-btn-container {
+		position: absolute;
+		bottom: 100px;
+		right: 10px;
 	}
 </style>
