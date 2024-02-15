@@ -1,0 +1,31 @@
+:root {
+	--font-body: 'Inter', sans-serif;
+	--text-color: #333;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+  }
+  
+  body {
+    font-size: 0.9rem;
+	font-family: var(--font-body);
+	color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+  }
+
+a {
+    text-decoration-thickness: 8; /* Thickness of underline as % of font size */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+          scroll-behavior: smooth;
+    }
+  }
