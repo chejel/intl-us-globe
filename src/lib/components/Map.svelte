@@ -147,12 +147,16 @@
 				center: [-95.7, 39],
 				essential: true, // "this animation is considered essential with respect to prefers-reduced-motion"
 				zoom: 3.75,
-				speed: 0.5,
+				speed: 0.65,
 				curve: 1,
 				easing(t) {
 					return t;
 				}
 			});
+		});
+
+		$map.on('click', ['us-layer'], (e) => {
+			console.log(e.features[0].properties.name);
 		});
 	});
 
@@ -168,9 +172,65 @@
 		duration: 1000
 	});
 
-	// Show US cities that match selected intl city
+	// Show US cities that match selected intl city and draw arc
 	$: if ($selectedIntlCity) {
 		$map.setFilter('us-layer', ['any', ['in', $selectedIntlCity, ['get', 'name']]]);
+
+		// Remove previous arc
+		if ($map.getLayer('matchingCities-line')) {
+			$map.removeLayer('matchingCities-line');
+		}
+
+		if ($map.getSource('matchingCities')) {
+			$map.removeSource('matchingCities');
+		}
+
+		// Draw arc between intl and us cities
+		$map.addSource('matchingCities', {
+			type: 'geojson',
+			data: arcData()
+		});
+
+		function arcData() {
+			const intlCityFeature = $citiesDataFC.features?.find(
+				(feature) => feature.intlCity.properties.name === $selectedIntlCity
+			);
+
+			//if (!intlCityFeature) return null;
+
+			const matchingUSCities = $citiesDataFC.features?.filter((feature) =>
+				feature.usCity.properties.name.includes($selectedIntlCity)
+			);
+
+			const matchingCityFeatures = matchingUSCities.map((usCityFeature) => {
+				return {
+					type: 'Feature',
+					geometry: {
+						type: 'LineString',
+						coordinates: [
+							intlCityFeature.intlCity.geometry.coordinates,
+							usCityFeature.usCity.geometry.coordinates
+						]
+					}
+				};
+			});
+
+			return {
+				type: 'FeatureCollection',
+				features: matchingCityFeatures
+			};
+		}
+
+		$map.addLayer({
+			id: 'matchingCities-line',
+			type: 'line',
+			source: 'matchingCities',
+			layout: { 'line-cap': 'round' },
+			paint: {
+				'line-color': '#007296',
+				'line-width': 2.5
+			}
+		});
 	}
 </script>
 
@@ -178,7 +238,7 @@
 
 {#if initialCenterLng !== movedCenterLng}
 	<div class="reset-btn-container">
-		<ResetMap {initialCenterLng} {movedCenterLng} />
+		<ResetMap />
 	</div>
 {/if}
 
