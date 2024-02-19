@@ -8,3 +8,9 @@
 		</p>
 	</section>
 </main>
+
+<style>
+	.panel-body {
+		overflow: auto;
+	}
+</style>
