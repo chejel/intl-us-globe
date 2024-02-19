@@ -10,7 +10,7 @@
 	import ResetMap from '$lib/components/ResetMap.svelte';
 
 	// Stores
-	import { map, citiesDataFC, selectedIntlCity } from '$lib/stores.js';
+	import { map, citiesDataFC, selectedIntlCity, matchingUSCities } from '$lib/stores.js';
 
 	let mapContainer;
 	let initialCenterLng;
@@ -173,6 +173,7 @@
 	});
 
 	// Show US cities that match selected intl city and draw arc
+	export let hideLines;
 	$: if ($selectedIntlCity) {
 		$map.setFilter('us-layer', ['any', ['in', $selectedIntlCity, ['get', 'name']]]);
 
@@ -198,11 +199,13 @@
 
 			//if (!intlCityFeature) return null;
 
-			const matchingUSCities = $citiesDataFC.features?.filter((feature) =>
-				feature.usCity.properties.name.includes($selectedIntlCity)
+			matchingUSCities.set(
+				$citiesDataFC.features?.filter((feature) =>
+					feature.usCity.properties.name.includes($selectedIntlCity)
+				)
 			);
 
-			const matchingCityFeatures = matchingUSCities.map((usCityFeature) => {
+			const matchingCityFeatures = $matchingUSCities.map((usCityFeature) => {
 				return {
 					type: 'Feature',
 					geometry: {
@@ -221,16 +224,18 @@
 			};
 		}
 
-		$map.addLayer({
-			id: 'matchingCities-line',
-			type: 'line',
-			source: 'matchingCities',
-			layout: { 'line-cap': 'round' },
-			paint: {
-				'line-color': '#007296',
-				'line-width': 2.5
-			}
-		});
+		if (!hideLines) {
+			$map.addLayer({
+				id: 'matchingCities-line',
+				type: 'line',
+				source: 'matchingCities',
+				layout: { 'line-cap': 'round' },
+				paint: {
+					'line-color': '#007296',
+					'line-width': 2.5
+				}
+			});
+		}
 	}
 </script>
 
@@ -238,7 +243,7 @@
 
 {#if initialCenterLng !== movedCenterLng}
 	<div class="reset-btn-container">
-		<ResetMap />
+		<ResetMap parentComponent="Map" bind:hideLines>Reset Map</ResetMap>
 	</div>
 {/if}
 

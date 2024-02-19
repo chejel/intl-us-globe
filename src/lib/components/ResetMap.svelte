@@ -1,26 +1,29 @@
 <script>
-	import { map } from '$lib/stores.js';
+	import { map, selectedIntlCity } from '$lib/stores.js';
+	export let parentComponent;
+	export let hideLines = false;
 </script>
 
 <button
-	class="reset-btn"
-	style="background-color: #F3B95F"
-	on:click|stopPropagation={() =>
+	class:resetBtn-map={parentComponent === 'Map'}
+	class:resetBtn-table={parentComponent === 'TablePanel'}
+	on:click|stopPropagation={() => {
 		$map.flyTo({
 			center: [50.45, 27.6],
 			essential: true, // "this animation is considered essential with respect to prefers-reduced-motion"
 			zoom: 2,
-			speed: 0.5,
-			curve: 1,
-			easing(t) {
-				return t;
-			}
-		})}>Reset Map</button
+			speed: 1,
+			curve: 1
+		});
+		if (!hideLines && $map.getLayer('matchingCities-line')) $map.removeLayer('matchingCities-line');
+		$map.setFilter('us-layer', ['in', 'name', '']);
+		if (parentComponent === 'TablePanel') $selectedIntlCity = undefined;
+	}}><slot /></button
 >
 
 <style>
-	.reset-btn {
-		/* background-color: #f4f4f4; */
+	.resetBtn-map {
+		background-color: #f3b95f;
 		border: 0;
 		cursor: pointer;
 		color: #333;
@@ -29,5 +32,13 @@
 		font-size: 0.9rem;
 		font-weight: 700;
 		text-transform: uppercase;
+	}
+
+	.resetBtn-table {
+		border: 0;
+		background-color: transparent;
+		display: flex;
+		cursor: pointer;
+		/* padding: 0.45rem 0.75rem; */
 	}
 </style>
