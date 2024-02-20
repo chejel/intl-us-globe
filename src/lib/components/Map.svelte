@@ -37,7 +37,7 @@
 				accessToken: mapboxgl.accessToken,
 				style: 'mapbox://styles/jenche/clsmom1ch043k01p5f4gsbq19',
 				zoom: 2,
-				maxZoom: 5,
+				maxZoom: 7,
 				center: [50.45, 27.6],
 				projection: 'globe'
 			})
@@ -79,8 +79,8 @@
 				source: 'intlCities',
 				paint: {
 					'circle-radius': 4,
-					'circle-stroke-width': 2,
-					'circle-color': 'red',
+					'circle-stroke-width': 1.5,
+					'circle-color': '#C70039',
 					'circle-stroke-color': 'white'
 				}
 			});
@@ -118,9 +118,9 @@
 				type: 'circle',
 				source: 'usCities',
 				paint: {
-					'circle-radius': 6,
-					'circle-stroke-width': 2,
-					'circle-color': 'yellow',
+					'circle-radius': 5,
+					'circle-stroke-width': 1.5,
+					'circle-color': '#F8DE22',
 					'circle-stroke-color': 'white'
 				}
 			});
@@ -128,7 +128,7 @@
 			// Hide US cities on initial load
 			$map.setFilter('us-layer', ['in', 'name', '']);
 
-			// Change cursor ti pointer when hovering over marker
+			// Change cursor to pointer when hovering over marker
 			$map.on('mouseenter', ['intl-layer', 'intl-labels'], () => {
 				$map.getCanvas().style.cursor = 'pointer';
 			});
@@ -144,19 +144,15 @@
 			selectedIntlCity.set(e.features[0].properties.name);
 
 			$map.flyTo({
-				center: [-95.7, 39],
+				center: [-92.7, 36],
 				essential: true, // "this animation is considered essential with respect to prefers-reduced-motion"
-				zoom: 3.75,
+				zoom: 3,
 				speed: 0.65,
 				curve: 1,
 				easing(t) {
 					return t;
 				}
 			});
-		});
-
-		$map.on('click', ['us-layer'], (e) => {
-			console.log(e.features[0].properties.name);
 		});
 	});
 
@@ -172,7 +168,7 @@
 		duration: 1000
 	});
 
-	// Show US cities that match selected intl city and draw arc
+	// Show US cities that match selected int'l city and draw arc
 	export let hideLines;
 	$: if ($selectedIntlCity) {
 		$map.setFilter('us-layer', ['any', ['in', $selectedIntlCity, ['get', 'name']]]);
