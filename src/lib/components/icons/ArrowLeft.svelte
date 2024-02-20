@@ -8,7 +8,7 @@
 	color="#000000"
 	><path
 		d="M21 12L3 12M3 12L11.5 3.5M3 12L11.5 20.5"
-		stroke="#000000"
+		stroke="#f3b95f"
 		stroke-width="2.1"
 		stroke-linecap="round"
 		stroke-linejoin="round"
