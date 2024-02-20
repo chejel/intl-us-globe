@@ -15,9 +15,13 @@
 			speed: 1,
 			curve: 1
 		});
-		if (!hideLines && $map.getLayer('matchingCities-line')) $map.removeLayer('matchingCities-line');
-		$map.setFilter('us-layer', ['in', 'name', '']);
-		if (parentComponent === 'TablePanel') $selectedIntlCity = undefined;
+
+		if (parentComponent === 'TablePanel') {
+			if (!hideLines && $map.getLayer('matchingCities-line'))
+				$map.removeLayer('matchingCities-line');
+			$map.setFilter('us-layer', ['in', 'name', '']);
+			$selectedIntlCity = undefined;
+		}
 	}}><slot /></button
 >
 
@@ -39,6 +43,6 @@
 		background-color: transparent;
 		display: flex;
 		cursor: pointer;
-		/* padding: 0.45rem 0.75rem; */
+		padding: 0.75rem 0 1.5rem;
 	}
 </style>
