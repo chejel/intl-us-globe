@@ -15,8 +15,10 @@
 			proper and not the metropolitan area. The U.S. municipality, on the other hand, includes any
 			populated entity from cities and towns to villages and unincorporated communities.
 		</p>
+	</section>
 
-		<span class="header"><MapPin />To do</span>
+	<section class="subsection">
+		<span class="subheader"><MapPin />To do</span>
 		<p>
 			Select a city to see the locations and names of the corresponding towns and cities in the U.S.
 			Zoom in on the globe to see city names that do not initially appear. The globe will then shift
@@ -24,7 +26,7 @@
 			the U.S.
 		</p>
 
-		<span class="header"><Table />Data source</span>
+		<span class="subheader"><Table />Data source</span>
 		<p>
 			The data comes from the U.S. <a href="Direct Link to All Names Data Products"
 				>Board on Geographic Names</a
@@ -34,21 +36,34 @@
 			>. The post includes a link to the previous version of this map, made using vanilla
 			JavaScript. The data was downloaded in spring 2023, the time of the initial project.
 		</p>
-		<hr />
-		<footer>
-			Made by <a href="https://jche.netlify.app/">Jennifer Cheng</a>
-			<a href="mailto:chejenj@gmail.com" aria-label="Send email"><MailOpen /></a>
-		</footer>
+		<!-- <hr /> -->
 	</section>
+
+	<footer>
+		Made by <a href="https://jche.netlify.app/">Jennifer Cheng</a>
+		<a href="mailto:chejenj@gmail.com" aria-label="Send email"><MailOpen /></a>
+	</footer>
 </main>
 
 <style>
 	.panel-body {
 		overflow: auto;
 		padding-top: 0.75rem;
+		background-color: rgba(23, 23, 23, 0.75);
 	}
 
-	.header {
+	.introduction {
+		padding: 0 1rem 1rem;
+		/* box-shadow: 0px 10px 13px rgba(0, 0, 0, 0.7); */
+	}
+
+	.subsection {
+		background-color: rgba(86, 2, 0, 0.5);
+		padding: 1rem;
+		box-shadow: inset 0px 0px 25px rgba(0, 0, 0, 0.75);
+	}
+
+	.subheader {
 		font-family: 'Barlow Condensed', sans-serif;
 		font-size: 1.2rem;
 		font-weight: 700;
@@ -63,5 +78,7 @@
 		display: flex;
 		align-items: center;
 		gap: 3px;
+		padding: 0.75rem 1rem;
+		background-color: rgba(0, 0, 0, 0.75);
 	}
 </style>

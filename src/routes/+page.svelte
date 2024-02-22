@@ -2,13 +2,8 @@
 	// Import components
 	import Map from '$lib/components/Map.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
-	import HeaderPanel from '$lib/components/HeaderPanel.svelte';
 	import AboutPanel from '$lib/components/AboutPanel.svelte';
 	import TablePanel from '$lib/components/TablePanel.svelte';
-	import HideLinesToggle from '$lib/components/HideLinesToggle.svelte';
-
-	// Import transition
-	import { fade } from 'svelte/transition';
 
 	// Set state of sidebar
 	let sidebarVisible = true;
@@ -19,9 +14,11 @@
 	// Load cities data
 	import { onMount } from 'svelte';
 	import { csv } from 'd3-fetch';
-	import { citiesData, citiesDataFC, selectedIntlCity, matchingUSCities } from '$lib/stores.js';
+	import { citiesData, citiesDataFC, selectedIntlCity } from '$lib/stores.js';
 
-	//import citiesData from '$lib/data/city_matches.csv';
+	// Import transition
+	import { fade } from 'svelte/transition';
+
 	onMount(async () => {
 		citiesData.set(
 			await csv(
@@ -66,30 +63,26 @@
 			features: $citiesData // array of geojson pt features
 		});
 	});
-
-	let hideLines = false;
 </script>
 
 <svelte:head>
 	<title>International Place Names in the U.S.</title>
 </svelte:head>
 
-<Map bind:sidebarVisible bind:hideLines />
-
-{#if $selectedIntlCity && $matchingUSCities.length > 0}
-	<div class="lines-toggle" transition:fade={{ duration: 300 }}>
-		<HideLinesToggle bind:hideLines />
-	</div>
-{/if}
+<Map bind:sidebarVisible />
 
 <!-- Sidebar -->
 {#if sidebarVisible}
 	<div class="sidebar-content" transition:fade={{ duration: 300 }}>
 		<Sidebar bind:sidebarVisible>
-			<HeaderPanel />
+			<header>
+				<h1>U.S. Cities with International Names</h1>
+			</header>
+
 			{#if $selectedIntlCity}
 				<TablePanel />
 			{:else}
+				<!-- <hr style="margin: 1rem 1rem 0.25rem;}" /> -->
 				<AboutPanel />
 			{/if}
 		</Sidebar>
@@ -105,36 +98,37 @@
 {/if}
 
 <style>
+	header {
+		background-color: rgba(23, 23, 23, 0.75);
+		padding: 1rem 1rem 0.25rem;
+		border-bottom: 1px solid #514e56;
+	}
+
+	h1 {
+		font-size: clamp(1.8em, 4vw, 2em);
+	}
+
 	.sidebar-content {
 		position: relative;
 		max-width: 450px;
 		max-height: calc(100svh - 4rem);
 		border-radius: 5px;
-		background-color: rgba(51, 51, 51, 0.5);
-		color: #fff;
-		padding: 0;
+		/* background-color: rgba(51, 51, 51, 0.85); */
+		background-color: rgba(23, 23, 23, 0.75);
 		top: 0;
 		z-index: 1;
-		margin: 2rem;
+		margin: 1rem;
 		box-shadow: 0px 0px 24px 3px rgba(255, 255, 255, 0.2);
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
+		z-index: 2;
 	}
 
 	.sidebar-collapsed {
 		position: absolute;
 		top: 0;
-		margin: 2rem;
-		cursor: pointer;
-		background-color: transparent;
-		border: 0;
-	}
-
-	.lines-toggle {
-		position: absolute;
-		bottom: 145px;
-		right: 10px;
+		margin: 1rem;
 		cursor: pointer;
 		background-color: transparent;
 		border: 0;
