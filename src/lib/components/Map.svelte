@@ -8,9 +8,13 @@
 
 	// Import components
 	import ResetMap from '$lib/components/ResetMap.svelte';
+	import HideLinesToggle from '$lib/components/HideLinesToggle.svelte';
 
 	// Stores
 	import { map, citiesDataFC, selectedIntlCity, matchingUSCities } from '$lib/stores.js';
+
+	// Import transition
+	import { slide } from 'svelte/transition';
 
 	let mapContainer;
 	let initialCenterLng;
@@ -69,7 +73,15 @@
 				type: 'geojson',
 				data: {
 					type: 'FeatureCollection',
-					features: $citiesDataFC.features?.map((feature) => feature.intlCity)
+					//features: $citiesDataFC.features?.map((feature) => feature.intlCity)
+					// Get unique values only
+					features: [
+						...new Map(
+							$citiesDataFC.features
+								.map((feature) => feature.intlCity)
+								.map((obj) => [`${obj.geometry.coordinates}`, obj])
+						).values()
+					]
 				}
 			});
 
@@ -120,7 +132,7 @@
 				paint: {
 					'circle-radius': 5,
 					'circle-stroke-width': 1.5,
-					'circle-color': '#F8DE22',
+					'circle-color': '#3746E6', // '#F8DE22',
 					'circle-stroke-color': 'white'
 				}
 			});
@@ -153,6 +165,11 @@
 					return t;
 				}
 			});
+
+			$map.fitBounds([
+				[-120.111385, 16.467695], // SW corner
+				[-60.402344, 51.069017] // NE corner
+			]);
 		});
 	});
 
@@ -169,7 +186,7 @@
 	});
 
 	// Show US cities that match selected int'l city and draw arc
-	export let hideLines;
+	let hideLines = false;
 	$: if ($selectedIntlCity) {
 		$map.setFilter('us-layer', ['any', ['in', $selectedIntlCity, ['get', 'name']]]);
 
@@ -182,7 +199,7 @@
 			$map.removeSource('matchingCities');
 		}
 
-		// Draw arc between intl and us cities
+		// Draw arc between intl and US cities
 		$map.addSource('matchingCities', {
 			type: 'geojson',
 			data: arcData()
@@ -227,8 +244,8 @@
 				source: 'matchingCities',
 				layout: { 'line-cap': 'round' },
 				paint: {
-					'line-color': '#007296',
-					'line-width': 2.5
+					'line-color': '#7752FE', // '#F57D1F',
+					'line-width': 1
 				}
 			});
 		}
@@ -237,11 +254,19 @@
 
 <div class="map" bind:this={mapContainer} />
 
-{#if initialCenterLng !== movedCenterLng}
-	<div class="reset-btn-container">
-		<ResetMap parentComponent="Map" bind:hideLines>Reset Map</ResetMap>
-	</div>
-{/if}
+<div class="btn-container">
+	{#if initialCenterLng !== movedCenterLng}
+		<div class="reset-btn-container" transition:slide={{ axis: 'y', duration: 300 }}>
+			<ResetMap parentComponent="Map" bind:hideLines>Reset Map</ResetMap>
+		</div>
+	{/if}
+
+	{#if $selectedIntlCity && $matchingUSCities.length > 0}
+		<div class="lines-toggle" transition:slide={{ axis: 'y', duration: 300 }}>
+			<HideLinesToggle bind:hideLines />
+		</div>
+	{/if}
+</div>
 
 <style>
 	.map {
@@ -251,9 +276,26 @@
 		bottom: 0;
 	}
 
-	.reset-btn-container {
+	.btn-container {
 		position: absolute;
-		bottom: 100px;
+		top: 10px;
 		right: 10px;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		row-gap: 10px;
+	}
+
+	.reset-btn-container {
+		top: 0;
+		right: 10px;
+	}
+
+	.lines-toggle {
+		top: 10px;
+		right: 10px;
+		cursor: pointer;
+		background-color: transparent;
+		border: 0;
 	}
 </style>
