@@ -1,6 +1,7 @@
 <script>
 	import { map, selectedIntlCity } from '$lib/stores.js';
 	export let parentComponent;
+	export let showLines = false;
 </script>
 
 <button
@@ -15,8 +16,9 @@
 			curve: 1
 		});
 
+		// If resetting map via back arrow in sidebar, remove match and lines
 		if (parentComponent === 'TablePanel') {
-			if (!hideLines && $map.getLayer('matchingCities-line'))
+			if (!showLines && $map.getLayer('matchingCities-line'))
 				$map.removeLayer('matchingCities-line');
 			$map.setFilter('us-layer', ['in', 'name', '']);
 			$selectedIntlCity = undefined;
