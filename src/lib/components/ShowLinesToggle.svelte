@@ -1,15 +1,15 @@
 <script>
-	export let hideLines;
+	export let showLines;
 
 	// Stores
 	import { matchingUSCities } from '$lib/stores.js';
 </script>
 
 <label for="state-toggle" class="toggle">
-	<input type="checkbox" id="state-toggle" bind:checked={hideLines} />
+	<input type="checkbox" id="state-toggle" bind:checked={showLines} />
 	<span class="switch"></span>
 </label>
-<span class="toggle-text">Hide {$matchingUSCities.length > 1 ? 'lines' : 'line'}</span>
+<span class="toggle-text">Show {$matchingUSCities.length > 1 ? 'lines' : 'line'}</span>
 
 <style>
 	.toggle-text {
@@ -62,7 +62,7 @@
 	}
 
 	input:checked + .switch {
-		background-color: #007296;
+		background-color: #7752fe; /* #007296; */
 	}
 
 	input:checked + .switch:before {

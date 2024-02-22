@@ -8,7 +8,7 @@
 
 	// Import components
 	import ResetMap from '$lib/components/ResetMap.svelte';
-	import HideLinesToggle from '$lib/components/HideLinesToggle.svelte';
+	import ShowLinesToggle from '$lib/components/ShowLinesToggle.svelte';
 
 	// Stores
 	import { map, citiesDataFC, selectedIntlCity, matchingUSCities } from '$lib/stores.js';
@@ -132,7 +132,7 @@
 				paint: {
 					'circle-radius': 5,
 					'circle-stroke-width': 1.5,
-					'circle-color': '#3746E6', // '#F8DE22',
+					'circle-color': 'rgba(0, 114, 150, 1)', // '#3746E6', // '#F8DE22',
 					'circle-stroke-color': 'white'
 				}
 			});
@@ -186,7 +186,7 @@
 	});
 
 	// Show US cities that match selected int'l city and draw arc
-	let hideLines = false;
+	let showLines = true;
 	$: if ($selectedIntlCity) {
 		$map.setFilter('us-layer', ['any', ['in', $selectedIntlCity, ['get', 'name']]]);
 
@@ -237,7 +237,7 @@
 			};
 		}
 
-		if (!hideLines) {
+		if (showLines) {
 			$map.addLayer({
 				id: 'matchingCities-line',
 				type: 'line',
@@ -257,13 +257,13 @@
 <div class="btn-container">
 	{#if initialCenterLng !== movedCenterLng}
 		<div class="reset-btn-container" transition:slide={{ axis: 'y', duration: 300 }}>
-			<ResetMap parentComponent="Map" bind:hideLines>Reset Map</ResetMap>
+			<ResetMap parentComponent="Map">Reset Map</ResetMap>
 		</div>
 	{/if}
 
 	{#if $selectedIntlCity && $matchingUSCities.length > 0}
 		<div class="lines-toggle" transition:slide={{ axis: 'y', duration: 300 }}>
-			<HideLinesToggle bind:hideLines />
+			<ShowLinesToggle bind:showLines />
 		</div>
 	{/if}
 </div>

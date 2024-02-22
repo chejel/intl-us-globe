@@ -1,7 +1,6 @@
 <script>
 	import { map, selectedIntlCity } from '$lib/stores.js';
 	export let parentComponent;
-	export let hideLines = false;
 </script>
 
 <button
@@ -27,8 +26,8 @@
 
 <style>
 	.resetBtn-map {
-		background-color: #f3b95f;
-		border: 0;
+		background-color: rgba(243, 185, 95, 0.9);
+		border: 1px solid #f5a64c;
 		cursor: pointer;
 		color: #333;
 		padding: 0.45rem 0.75rem;
