@@ -20,11 +20,7 @@
 	import { fade } from 'svelte/transition';
 
 	onMount(async () => {
-		citiesData.set(
-			await csv(
-				'https://raw.githubusercontent.com/chejel/intl-cities-us/main/data/city_matches.csv'
-			)
-		);
+		citiesData.set(await csv('src/lib/data/city_matches.csv'));
 
 		citiesData.update((d) => {
 			return d.map((e) => {
@@ -37,7 +33,8 @@
 						},
 						properties: {
 							name: e.us_city,
-							state: e.state_name
+							state: e.state_name,
+							county: e.county_name
 						}
 					},
 					intlCity: {
