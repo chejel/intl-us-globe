@@ -20,8 +20,8 @@
 <style>
 	.close-button {
 		position: absolute;
-		top: 5px;
-		right: 5px;
+		top: 6px;
+		right: 0px;
 		background-color: transparent;
 		border: 0;
 		cursor: pointer;
