@@ -57,16 +57,18 @@
 			</colgroup>
 			<thead>
 				<tr>
-					<th scope="col">#</th>
-					<th scope="col">City</th>
-					<th scope="col">U.S. State</th>
+					<th scope="col" style="color: rgba(248, 222, 34, 0.85)">#</th>
+					<th scope="col"
+						>US City <span style="font-weight: 400; color: #C7C8CC;">(County)</span></th
+					>
+					<th scope="col">State</th>
 				</tr></thead
 			>
 			<tbody>
-				{#each filteredData as { index, name, state }}
+				{#each filteredData as { index, name, state, county }}
 					<tr>
 						<td class="index">{index}</td>
-						<td class="value" on:click={() => console.log(name)}>{name} </td>
+						<td class="value">{name} <span style="color: #B4B4B8">({county})</span></td>
 						<td>{state}</td>
 					</tr>
 				{/each}
@@ -85,18 +87,19 @@
 		font-family: 'Barlow Condensed', sans-serif;
 		font-size: 1.25rem;
 		background-color: rgba(23, 23, 23, 0.75);
-		padding: 0.5rem 1rem 1.25rem;
+		padding: 0 1rem 1.25rem;
 	}
 
 	.intl-city {
-		background-color: rgba(var(--intl-city-color), 0.9);
+		background-color: rgba(199, 0, 57, 0.9);
 		padding: 0 0.3rem;
 		border-radius: 5px;
 		font-weight: 600;
 	}
 
 	.us-city {
-		background-color: rgba(55, 70, 230, 0.9);
+		/* background-color: rgba(11, 96, 127, 1); */
+		background-color: rgba(0, 101, 138, 0.9);
 		padding: 0 0.3rem;
 		border-radius: 5px;
 	}
@@ -111,7 +114,7 @@
 		width: 100%;
 		border-radius: 5px;
 		/* background-color: rgba(86, 2, 0, 0.5); */
-		background-color: rgba(13, 21, 109, 0.5);
+		background-color: rgba(2, 52, 74, 0.5);
 	}
 
 	th {
@@ -141,7 +144,7 @@
 	/* index numbers */
 	tr td:first-child {
 		padding: 0 0.5rem;
-		color: rgba(var(--us-muni-color), 0.85);
+		color: rgba(248, 222, 34, 0.85);
 		text-align: right;
 	}
 

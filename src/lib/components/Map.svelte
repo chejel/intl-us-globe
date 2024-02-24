@@ -244,7 +244,7 @@
 				source: 'matchingCities',
 				layout: { 'line-cap': 'round' },
 				paint: {
-					'line-color': '#7752FE', // '#F57D1F',
+					'line-color': '#9D76C1', // '#F57D1F',
 					'line-width': 1
 				}
 			});
