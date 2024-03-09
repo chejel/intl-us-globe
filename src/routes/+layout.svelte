@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>International Place Names in the U.S.</title>
+	<title>International City Names in the U.S.</title>
 </svelte:head>
 
 <slot />
