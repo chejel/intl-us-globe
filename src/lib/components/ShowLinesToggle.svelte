@@ -62,7 +62,7 @@
 	}
 
 	input:checked + .switch {
-		background-color: #7752fe; /* #007296; */
+		background-color: #7469b6; /* #007296; */
 	}
 
 	input:checked + .switch:before {

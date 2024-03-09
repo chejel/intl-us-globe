@@ -62,10 +62,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>International Place Names in the U.S.</title>
-</svelte:head>
-
 <Map bind:sidebarVisible />
 
 <!-- Sidebar -->
@@ -108,7 +104,7 @@
 	.sidebar-content {
 		position: relative;
 		max-width: 450px;
-		max-height: calc(100svh - 4rem);
+		max-height: calc(100svh - 2rem);
 		border-radius: 5px;
 		/* background-color: rgba(51, 51, 51, 0.85); */
 		background-color: rgba(23, 23, 23, 0.75);

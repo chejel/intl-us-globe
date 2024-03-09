@@ -21,7 +21,7 @@
 	let movedCenterLng;
 
 	mapboxgl.accessToken =
-		'pk.eyJ1IjoiamVuY2hlIiwiYSI6ImNsZzZ6OWh4ajA0dGczd25wMzRwcmUwZnEifQ.wSe4_SgYEgC-QX-6Clad9w';
+		'pk.eyJ1IjoiamVuY2hlIiwiYSI6ImNsdGprOGJ3ODBxamcybnQ5cjJkbXd1ZmcifQ.3uvrMBH4Wc6mJ60Bx9iMPQ';
 
 	// Set state of sidebar and globe padding
 	export let sidebarVisible;

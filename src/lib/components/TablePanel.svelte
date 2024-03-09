@@ -37,9 +37,8 @@
 	<!-- Headline -->
 	<div class="headline">
 		<span class="intl-city">{$selectedIntlCity}</span>
-		<!-- , {selectedCountry.country} -->
-		{selectedCountry.flagEmoji}
-		{$citiesData.length > 1 ? 'matches' : 'match'}
+		{selectedCountry.flagEmoji}&nbsp;
+		{$citiesData.length > 1 ? 'matches' : 'match'}&nbsp;
 		<span class="us-city"
 			><strong>{filteredData.length}</strong> U.S. {filteredData.length > 1
 				? 'municipalities'
@@ -91,7 +90,7 @@
 	}
 
 	.intl-city {
-		background-color: rgba(199, 0, 57, 0.9);
+		background-color: rgba(199, 0, 57, 0.75);
 		padding: 0 0.3rem;
 		border-radius: 5px;
 		font-weight: 600;
