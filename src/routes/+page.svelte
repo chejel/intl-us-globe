@@ -13,14 +13,14 @@
 
 	// Load cities data
 	import { onMount } from 'svelte';
-	import { csv } from 'd3-fetch';
+	import data from '$lib/data/city_matches.json';
 	import { citiesData, citiesDataFC, selectedIntlCity } from '$lib/stores.js';
 
 	// Import transition
 	import { fade } from 'svelte/transition';
 
 	onMount(async () => {
-		citiesData.set(await csv('src/lib/data/city_matches.csv'));
+		citiesData.set(data);
 
 		citiesData.update((d) => {
 			return d.map((e) => {
