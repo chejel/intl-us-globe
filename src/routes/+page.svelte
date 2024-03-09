@@ -69,7 +69,7 @@
 	<div class="sidebar-content" transition:fade={{ duration: 300 }}>
 		<Sidebar bind:sidebarVisible>
 			<header>
-				<h1>U.S. Cities with International Names</h1>
+				<h1>U.S. Places with International Names</h1>
 			</header>
 
 			{#if $selectedIntlCity}
