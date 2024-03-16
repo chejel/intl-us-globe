@@ -12,7 +12,7 @@
 			municipalities in the US, either fully or in part. The names may or may not have a shared
 			history; the only relationship meant to be conveyed here is the similarity in name. The
 			international cities include just those with a population greater than 1 million in the city
-			proper and not the metropolitan area. The US municipality, on the other hand, includes any
+			proper and not the metropolitan area. The US municipalities, on the other hand, include any
 			populated entity, from cities and towns to villages and unincorporated communities.
 		</p>
 	</section>
@@ -30,8 +30,7 @@
 			The US place names data comes from the U.S. Board on Geographic Names' <a
 				href="https://www.usgs.gov/us-board-on-geographic-names/domestic-names">Domestic Names</a
 			>
-			page (under "Direct Link to All Names Data Products") while the international data originates
-			from
+			page (under "Direct Link to All Names Data Products") while the international data originates from
 			<a href="https://www.naturalearthdata.com/">Natural Earth</a>
 			via the <a href="https://cran.r-project.org/web/packages/maps/"><em>maps</em> package</a> in
 			R. Read more from my
