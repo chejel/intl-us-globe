@@ -27,10 +27,11 @@
 
 		<span class="subheader"><Table />Data source</span>
 		<p>
-			The US place names data comes from the U.S. <a href="Direct Link to All Names Data Products"
-				>Board on Geographic Names</a
+			The US place names data comes from the U.S. Board on Geographic Names' <a
+				href="https://www.usgs.gov/us-board-on-geographic-names/domestic-names">Domestic Names</a
 			>
-			while the international data originates from
+			page (under "Direct Link to All Names Data Products") while the international data originates
+			from
 			<a href="https://www.naturalearthdata.com/">Natural Earth</a>
 			via the <a href="https://cran.r-project.org/web/packages/maps/"><em>maps</em> package</a> in
 			R. Read more from my
